@@ -1,8 +1,7 @@
-#!/apps/perl/5.14.2/bin/perl
+#!/usr/bin/perl -w
 use strict;
-use lib "/apps/perl/modules-1608/lib";
 
-use List::Util qw(zip);
+use List::MoreUtils qw(pairwise);
 
 my @a = ();
 my @b = ();
@@ -14,12 +13,14 @@ while (<>) {
     }
 }
 
-my @zip = zip \@a, \@b;
+@a = sort(@a);
+@b = sort(@b);
+
+my @diffs = pairwise { abs($a - $b) } @a, @b;
 
 my $total_diff = 0;
 
-foreach my $pair (@zip) {
-    my $diff = abs($pair->[0] - $pair->[1]);
+foreach my $diff (@diffs) {
     $total_diff += $diff;
 }
 
