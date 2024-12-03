@@ -21,6 +21,26 @@ exit(0);
 sub is_safe {
     my ($line_num, @elts) = @_;
 
+    if (_is_safe($line_num, @elts)) {
+        return 1;
+    }
+    # Try removing a level and running _is_safe() - return true if _is_safe() is true, or false if all of them are false
+    my $num_elts = scalar(@elts); 
+
+    foreach my $trial (0..$num_elts -1) {
+        my @elts_mod = @elts;
+        splice(@elts_mod, $trial, 1);
+        if (_is_safe($line_num, @elts_mod)) {
+            return 1;
+        }
+    }
+    return 0;
+
+}
+
+sub _is_safe {
+    my ($line_num, @elts) = @_;
+
     my $prev = undef;
     my @deltas = ();
 
